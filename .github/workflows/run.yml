@@ -43,6 +43,10 @@ jobs:
           echo "netflix_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/netflix.txt" >> $GITHUB_ENV
           echo "telegram_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/telegram.txt" >> $GITHUB_ENV
           echo "twitter_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/twitter.txt" >> $GITHUB_ENV
+		  echo "Clang_cn=https://ispip.clang.cn/all_cn.txt" >> $GITHUB_ENV
+		  echo "Clang_cn6=https://ispip.clang.cn/all_cn_ipv6.txt" >> $GITHUB_ENV
+		  echo "gaoyifan_cn=https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt" >> $GITHUB_ENV
+		  echo "gaoyifan_cn6=https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt" >> $GITHUB_ENV
           echo "blackmatrix7_chinamax_domain=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMax/ChinaMax_Domain.txt" >> $GITHUB_ENV
         shell: bash
 
@@ -54,6 +58,8 @@ jobs:
           mkdir -p Loyalsoldier/ruleset
           mkdir -p Loyalsoldier/ipset
           mkdir -p Loyalsoldier/ipcidr
+		  mkdir -p Clang
+		  mkdir -p gaoyifan
           mkdir -p blackmatrix7
           
       - name: Generate icloud.txt file
@@ -129,10 +135,16 @@ jobs:
           curl -sSL ${cn_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' >> Loyalsoldier/ipset/cn+private.txt
           curl -sSL ${private_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/cn+private.txt
           curl -sSL ${cn_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/cn+private.txt
-          curl -sSL ${private_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/cn+private.txt
-          curl -sSL ${cn_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' >> Loyalsoldier/ipcidr/cn+private.txt
-          curl -sSL ${private_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/cn+private.txt
-          curl -sSL ${cn_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/cn+private.txt
+
+      - name: Generate Clang-cn.txt file
+        run: |
+          curl -sSL ${Clang_cn} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Clang/Clang-cn.txt
+          curl -sSL ${Clang_cn6} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Clang/Clang-cn.txt
+
+      - name: Generate gaoyifan-cn.txt file
+        run: |
+          curl -sSL ${gaoyifan_cn} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > gaoyifan/gaoyifan-cn.txt
+          curl -sSL ${gaoyifan_cn6} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> gaoyifan/gaoyifan-cn.txt
 
       - name: Generate cn.txt file
         run: |
@@ -225,9 +237,14 @@ jobs:
       - name: Move files to publish directory
         run: |
           mkdir -p publish/Loyalsoldier
+		  mkdir -p publish/Clang
+		  mkdir -p publish/gaoyifan
           mkdir -p publish/blackmatrix7
-          mv blackmatrix7/* ./publish/blackmatrix7/
-          mv Loyalsoldier/* ./publish/Loyalsoldier/
+		  mv Loyalsoldier/* ./publish/Loyalsoldier/
+          mv Clang/* ./publish/Clang/
+		  mv gaoyifan/* ./publish/gaoyifan/
+		  mv blackmatrix7/* ./publish/blackmatrix7/
+          
 
       - name: Git push assets to "release" branch
         run: |
