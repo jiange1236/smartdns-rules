@@ -210,6 +210,7 @@ jobs:
       - name: Move files to publish directory
         run: |
           mkdir -p publish/Loyalsoldier
+          mv Loyalsoldier.zip ./publish/
           mv Loyalsoldier/* ./publish/Loyalsoldier/
 
       - name: Git push assets to "release" branch
