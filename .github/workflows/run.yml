@@ -48,6 +48,8 @@ jobs:
           echo "gaoyifan_cn=https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt" >> $GITHUB_ENV
           echo "gaoyifan_cn6=https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt" >> $GITHUB_ENV
           echo "blackmatrix7_chinamax_domain=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMax/ChinaMax_Domain.txt" >> $GITHUB_ENV
+          echo "blackmatrix7_global_domain=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Global/Global_Domain.txt" >> $GITHUB_ENV
+          echo "1stream-utils_domain=https://raw.githubusercontent.com/1-stream/1stream-public-utils/main/stream.smartdns.list" >> $GITHUB_ENV
         shell: bash
 
       - name: Checkout the default branch
@@ -61,6 +63,7 @@ jobs:
           mkdir -p Clang
           mkdir -p gaoyifan
           mkdir -p blackmatrix7
+          mkdir -p 1stream
           
       - name: Generate icloud.txt file
         run: |
@@ -220,6 +223,14 @@ jobs:
         run: |
           curl -sSL ${blackmatrix7_chinamax_domain} | grep -Ev "^#" | sed 's/^\.//;s/^\s*//' > blackmatrix7/ChinaMax_Domain.txt
 
+      - name: Generate Global_Domain.txt file
+        run: |
+          curl -sSL ${blackmatrix7_global_domain} | grep -Ev "^#" | sed 's/^\.//;s/^\s*//' > blackmatrix7/Global_Domain.txt
+
+      - name: Generate stream-smartdns.txt file
+        run: |
+          curl -sSL ${1stream-utils_domain} | grep -Ev "^#" | sed -e 's/nameserver \/\(.*\)\/<replace with groupname>/\1/g' > 1stream/stream-smartdns.txt
+
       - name: Zip Files Action
         uses: montudor/action-zip@v1
         with:
@@ -240,6 +251,11 @@ jobs:
         with:
           args: zip -qq -r blackmatrix7.zip blackmatrix7
 
+      - name: Zip Files Action
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r 1stream.zip 1stream
+
       - name: Upload files to GitHub release
         uses: softprops/action-gh-release@v2.0.5
         with:
@@ -255,10 +271,12 @@ jobs:
           mkdir -p publish/Clang
           mkdir -p publish/gaoyifan
           mkdir -p publish/blackmatrix7
+          mkdir -p publish/1stream
           mv Loyalsoldier/* ./publish/Loyalsoldier/
           mv Clang/* ./publish/Clang/
           mv gaoyifan/* ./publish/gaoyifan/
           mv blackmatrix7/* ./publish/blackmatrix7/
+          mv 1stream/* ./publish/1stream/
 
       - name: Git push assets to "release" branch
         run: |
