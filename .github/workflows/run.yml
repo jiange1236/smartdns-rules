@@ -225,6 +225,21 @@ jobs:
         with:
           args: zip -qq -r Loyalsoldier.zip Loyalsoldier
 
+      - name: Zip Files Action
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r Clang.zip Clang
+
+      - name: Zip Files Action
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r gaoyifan.zip gaoyifan
+
+      - name: Zip Files Action
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r blackmatrix7.zip blackmatrix7
+
       - name: Upload files to GitHub release
         uses: softprops/action-gh-release@v2.0.5
         with:
