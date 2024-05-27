@@ -1,0 +1,248 @@
+name: Generate routing rules for smartdns
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 22 * * *"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/README.md"
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set variables
+        run: |
+          echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "custom_icloud=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/icloud.txt" >> $GITHUB_ENV
+          echo "custom_tld_not_cn=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/tld-!cn.txt" >> $GITHUB_ENV
+          echo "custom_private=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/private.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_direct=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_proxy=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_reject=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/reject-list.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_china_list=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/china-list.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_gfw=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_greatfire=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/greatfire.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_apple_cn=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/apple-cn.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_google_cn=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/google-cn.txt" >> $GITHUB_ENV
+          echo "cn_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/cn.txt" >> $GITHUB_ENV
+          echo "private_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/private.txt" >> $GITHUB_ENV
+          echo "cloudflare_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/cloudflare.txt" >> $GITHUB_ENV
+          echo "cloudfront_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/cloudfront.txt" >> $GITHUB_ENV
+          echo "facebook_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/facebook.txt" >> $GITHUB_ENV
+          echo "fastly_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/fastly.txt" >> $GITHUB_ENV
+          echo "google_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/google.txt" >> $GITHUB_ENV
+          echo "netflix_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/netflix.txt" >> $GITHUB_ENV
+          echo "telegram_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/telegram.txt" >> $GITHUB_ENV
+          echo "twitter_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/twitter.txt" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Checkout the default branch
+        uses: actions/checkout@v4
+
+      - name: Make directory
+        run: |
+          mkdir -p Loyalsoldier/ruleset
+          mkdir -p Loyalsoldier/ipset
+          mkdir -p Loyalsoldier/ipcidr
+          
+      - name: Generate icloud.txt file
+        run: |
+          curl -sSL ${custom_icloud} | grep -E "^full:" | awk -F ':' '{printf "%s\n", $2}' > Loyalsoldier/icloud.txt
+          curl -sSL ${custom_icloud} | grep -E "^domain:" | awk -F ':' '{printf "%s\n", $2}' >> Loyalsoldier/icloud.txt
+          curl -sSL ${custom_icloud} | grep -E "^full:" | awk -F ':' '{printf "DOMAIN,%s\n", $2}' > Loyalsoldier/ruleset/icloud.txt
+          curl -sSL ${custom_icloud} | grep -E "^domain:" | awk -F ':' '{printf "DOMAIN-SUFFIX,%s\n", $2}' >> Loyalsoldier/ruleset/icloud.txt
+
+      - name: Generate google-cn.txt file
+        run: |
+          curl -sSL ${Loyalsoldier_google_cn} | grep -E "^full:" | awk -F ':' '{printf "%s\n", $2}' > Loyalsoldier/google-cn.txt
+          curl -sSL ${Loyalsoldier_google_cn} | grep -E "^domain:" | awk -F ':' '{printf "%s\n", $2}' >> Loyalsoldier/google-cn.txt
+          curl -sSL ${Loyalsoldier_google_cn} | grep -E "^full:" | awk -F ':' '{printf "DOMAIN,%s\n", $2}' > Loyalsoldier/ruleset/google-cn.txt
+          curl -sSL ${Loyalsoldier_google_cn} | grep -E "^domain:" | awk -F ':' '{printf "DOMAIN-SUFFIX,%s\n", $2}' >> Loyalsoldier/ruleset/google-cn.txt
+
+      - name: Generate apple-cn.txt file
+        run: |
+          curl -sSL ${Loyalsoldier_apple_cn} | grep -E "^full:" | awk -F ':' '{printf "%s\n", $2}' > Loyalsoldier/apple-cn.txt
+          curl -sSL ${Loyalsoldier_apple_cn} | grep -E "^domain:" | awk -F ':' '{printf "%s\n", $2}' >> Loyalsoldier/apple-cn.txt
+          curl -sSL ${Loyalsoldier_apple_cn} | grep -E "^full:" | awk -F ':' '{printf "DOMAIN,%s\n", $2}' > Loyalsoldier/ruleset/apple-cn.txt
+          curl -sSL ${Loyalsoldier_apple_cn} | grep -E "^domain:" | awk -F ':' '{printf "DOMAIN-SUFFIX,%s\n", $2}' >> Loyalsoldier/ruleset/apple-cn.txt
+
+      - name: Generate direct-list.txt file
+        run: |
+          curl -sSL ${Loyalsoldier_direct} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > Loyalsoldier/direct-list.txt
+          curl -sSL ${Loyalsoldier_direct} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' >> Loyalsoldier/direct-list.txt
+          curl -sSL ${Loyalsoldier_direct} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN,$2\n"' > Loyalsoldier/ruleset/direct-list.txt
+          curl -sSL ${Loyalsoldier_direct} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN-SUFFIX,$2\n"' >> Loyalsoldier/ruleset/direct-list.txt
+
+      - name: Generate proxy-list.txt file
+        run: |
+          curl -sSL ${Loyalsoldier_proxy} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > Loyalsoldier/proxy-list.txt
+          curl -sSL ${Loyalsoldier_proxy} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' >> Loyalsoldier/proxy-list.txt
+          curl -sSL ${Loyalsoldier_proxy} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN,$2\n"' > Loyalsoldier/ruleset/proxy-list.txt
+          curl -sSL ${Loyalsoldier_proxy} | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN-SUFFIX,$2\n"' >> Loyalsoldier/ruleset/proxy-list.txt
+
+      - name: Generate reject-list.txt file
+        run: |
+          curl -sSL ${Loyalsoldier_reject} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > Loyalsoldier/reject-list.txt
+          curl -sSL ${Loyalsoldier_reject} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN-SUFFIX,$2\n"' > Loyalsoldier/ruleset/reject-list.txt
+
+      - name: Generate china-list.txt file
+        run: |
+          curl -sSL ${Loyalsoldier_china_list} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > Loyalsoldier/china-list.txt
+          curl -sSL ${Loyalsoldier_china_list} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN-SUFFIX,$2\n"' > Loyalsoldier/ruleset/china-list.txt
+
+      - name: Generate private.txt file
+        run: |
+          curl -sSL ${custom_private} | awk -F ':' '/^full:/ {printf "%s\n", $2}' > Loyalsoldier/private.txt
+          curl -sSL ${custom_private} | awk -F ':' '/^domain:/ {printf "%s\n", $2}' >> Loyalsoldier/private.txt
+          curl -sSL ${custom_private} | awk -F ':' '/^full:/ {printf "DOMAIN,%s\n", $2}' > Loyalsoldier/ruleset/private.txt
+          curl -sSL ${custom_private} | awk -F ':' '/^domain:/ {printf "DOMAIN-SUFFIX,%s\n", $2}' >> Loyalsoldier/ruleset/private.txt
+
+      - name: Generate gfw.txt file
+        run: |
+          curl -sSL ${Loyalsoldier_gfw} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > Loyalsoldier/gfw.txt
+          curl -sSL ${Loyalsoldier_gfw} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN-SUFFIX,$2\n"' > Loyalsoldier/ruleset/gfw.txt
+
+      - name: Generate greatfire.txt file
+        run: |
+          curl -sSL ${Loyalsoldier_greatfire} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > Loyalsoldier/greatfire.txt
+          curl -sSL ${Loyalsoldier_greatfire} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN-SUFFIX,$2\n"' > Loyalsoldier/ruleset/greatfire.txt
+
+      - name: Generate tld-not-cn.txt file
+        run: |
+          curl -sSL ${custom_tld_not_cn} | grep -E "^domain:" | awk -F ':' '{printf ".%s\n", $2}' > Loyalsoldier/tld-not-cn.txt
+          curl -sSL ${custom_tld_not_cn} | grep -E "^domain:" | awk -F ':' '{printf "DOMAIN-SUFFIX,%s\n", $2}' > Loyalsoldier/ruleset/tld-not-cn.txt
+
+      - name: Generate cn+private.txt file
+        run: |
+          curl -sSL ${private_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/cn+private.txt
+          curl -sSL ${cn_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/cn+private.txt
+          curl -sSL ${private_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ruleset/cn+private.txt
+          curl -sSL ${cn_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ruleset/cn+private.txt
+          curl -sSL ${cn_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/cn+private.txt
+          curl -sSL ${private_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/cn+private.txt
+          curl -sSL ${cn_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ruleset/cn+private.txt
+          curl -sSL ${private_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ruleset/cn+private.txt
+
+      - name: Generate cn.txt file
+        run: |
+          curl -sSL ${cn_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/cn.txt
+          curl -sSL ${cn_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/cn-cidr.txt
+          curl -sSL ${cn_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/cn.txt
+          curl -sSL ${cn_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/cn-cidr.txt
+
+      - name: Generate private.txt file
+        run: |
+          curl -sSL ${private_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/private.txt
+          curl -sSL ${private_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/private-cidr.txt
+          curl -sSL ${private_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/private.txt
+          curl -sSL ${private_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/private-cidr.txt
+
+      - name: Generate cloudflare.txt file
+        run: |
+          curl -sSL ${cloudflare_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/cloudflare.txt
+          curl -sSL ${cloudflare_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/cloudflare-cidr.txt
+          curl -sSL ${cloudflare_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/cloudflare.txt
+          curl -sSL ${cloudflare_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/cloudflare-cidr.txt
+
+      - name: Generate cloudfront.txt file
+        run: |
+          curl -sSL ${cloudfront_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/cloudfront.txt
+          curl -sSL ${cloudfront_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/cloudfront-cidr.txt
+          curl -sSL ${cloudfront_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/cloudfront.txt
+          curl -sSL ${cloudfront_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/cloudfront-cidr.txt
+
+      - name: Generate facebook.txt file
+        run: |
+          curl -sSL ${facebook_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/facebook.txt
+          curl -sSL ${facebook_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/facebook-cidr.txt
+          curl -sSL ${facebook_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/facebook.txt
+          curl -sSL ${facebook_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/facebook-cidr.txt
+
+      - name: Generate fastly.txt file
+        run: |
+          curl -sSL ${fastly_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/fastly.txt
+          curl -sSL ${fastly_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/fastly-cidr.txt
+          curl -sSL ${fastly_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/fastly.txt
+          curl -sSL ${fastly_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/fastly-cidr.txt
+
+      - name: Generate google.txt file
+        run: |
+          curl -sSL ${google_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/google.txt
+          curl -sSL ${google_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/google-cidr.txt
+          curl -sSL ${google_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/google.txt
+          curl -sSL ${google_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/google-cidr.txt
+
+      - name: Generate netflix.txt file
+        run: |
+          curl -sSL ${netflix_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/netflix.txt
+          curl -sSL ${netflix_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/netflix-cidr.txt
+          curl -sSL ${netflix_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/netflix.txt
+          curl -sSL ${netflix_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/netflix-cidr.txt
+
+      - name: Generate telegram.txt file
+        run: |
+          curl -sSL ${telegram_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/telegram.txt
+          curl -sSL ${telegram_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/telegram-cidr.txt
+          curl -sSL ${telegram_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/telegram.txt
+          curl -sSL ${telegram_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/telegram-cidr.txt
+
+      - name: Generate twitter.txt file
+        run: |
+          curl -sSL ${twitter_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/twitter.txt
+          curl -sSL ${twitter_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > Loyalsoldier/ipcidr/twitter-cidr.txt
+          curl -sSL ${twitter_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/twitter.txt
+          curl -sSL ${twitter_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/twitter-cidr.txt
+
+      - name: Zip Files Action
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r Loyalsoldier.zip Loyalsoldier
+
+      - name: Move files to publish directory
+        run: |
+          mkdir -p publish/Loyalsoldier
+          cp Loyalsoldier/*.txt ./publish/Loyalsoldier/
+          mv Loyalsoldier/ruleset ./publish/Loyalsoldier/
+          mv Loyalsoldier/ipset ./publish/Loyalsoldier/
+          mv Loyalsoldier/ipcidr ./publish/Loyalsoldier/
+          cp Loyalsoldier.zip ./publish/
+
+      - name: Git push assets to "release" branch
+        run: |
+          cd publish || exit 1
+          git init
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b release
+          git add .
+          git commit -m "${{ env.RELEASE_NAME }}"
+          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git push -f -u origin release
+
+      - name: Purge jsdelivr CDN
+        run: |
+          cd publish || exit 1
+          for file in $(ls Loyalsoldier); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/${file}"
+          done
+          for file in $(ls Loyalsoldier/ruleset); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/ruleset/${file}"
+          done
+          for file in $(ls Loyalsoldier/ipset); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/ipset/${file}"
+          done
+          for file in $(ls Loyalsoldier/ipcidr); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/ipcidr/${file}"
+          done
+
+      - name: Upload files to GitHub release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file_glob: true
+          file: ./publish/*
+          tag: ${{ env.TAG_NAME }}
