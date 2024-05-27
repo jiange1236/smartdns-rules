@@ -208,12 +208,12 @@ jobs:
           args: zip -qq -r Loyalsoldier.zip Loyalsoldier
 
       - name: Upload files to GitHub release
-        uses: svenstaro/upload-release-action@v2
+        uses: softprops/action-gh-release@v2.0.5
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file_glob: true
-          file: ./*.zip
-          tag: ${{ env.TAG_NAME }}
+          files: |
+            ./*.*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Move files to publish directory
         run: |
