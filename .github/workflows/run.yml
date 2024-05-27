@@ -212,7 +212,7 @@ jobs:
         with:
           tag_name: ${{ env.TAG_NAME }}
           files: |
-            ./*.*.zip
+            ./*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
