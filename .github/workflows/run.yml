@@ -207,10 +207,17 @@ jobs:
         with:
           args: zip -qq -r Loyalsoldier.zip Loyalsoldier
 
+      - name: Upload files to GitHub release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file_glob: true
+          file: ./*
+          tag: ${{ env.TAG_NAME }}
+
       - name: Move files to publish directory
         run: |
           mkdir -p publish/Loyalsoldier
-          mv Loyalsoldier.zip ./publish/
           mv Loyalsoldier/* ./publish/Loyalsoldier/
 
       - name: Git push assets to "release" branch
@@ -240,11 +247,3 @@ jobs:
           for file in $(ls Loyalsoldier/ipcidr); do
             curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/ipcidr/${file}"
           done
-
-      - name: Upload files to GitHub release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file_glob: true
-          file: ./publish/*
-          tag: ${{ env.TAG_NAME }}
