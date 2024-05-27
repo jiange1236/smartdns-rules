@@ -212,7 +212,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: ./*
+          file: ./*.zip
           tag: ${{ env.TAG_NAME }}
 
       - name: Move files to publish directory
