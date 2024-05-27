@@ -221,15 +221,15 @@ jobs:
 
       - name: Generate ChinaMax_Domain.txt file
         run: |
-          curl -sSL ${blackmatrix7_chinamax_domain} | grep -Ev "^#" | sed 's/^\.//;s/^\s*//' > blackmatrix7/ChinaMax_Domain.txt
+          curl -sSL ${blackmatrix7_chinamax_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed 's/^\.//;s/^\s*//' > blackmatrix7/ChinaMax_Domain.txt
 
       - name: Generate Global_Domain.txt file
         run: |
-          curl -sSL ${blackmatrix7_global_domain} | grep -Ev "^#" | sed 's/^\.//;s/^\s*//' > blackmatrix7/Global_Domain.txt
+          curl -sSL ${blackmatrix7_global_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed 's/^\.//;s/^\s*//' > blackmatrix7/Global_Domain.txt
 
       - name: Generate stream-smartdns.txt file
         run: |
-          curl -sSL ${stream_utils_domain} | grep -Ev "^#" | sed -e 's/nameserver \/\(.*\)\/<replace with groupname>/\1/g' > 1stream/stream-smartdns.txt
+          curl -sSL ${stream_utils_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/nameserver \/\(.*\)\/<replace with groupname>/\1/g' > 1stream/stream-smartdns.txt
 
       - name: Zip Files Action
         uses: montudor/action-zip@v1
