@@ -43,10 +43,10 @@ jobs:
           echo "netflix_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/netflix.txt" >> $GITHUB_ENV
           echo "telegram_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/telegram.txt" >> $GITHUB_ENV
           echo "twitter_cidr=https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/twitter.txt" >> $GITHUB_ENV
-		  echo "Clang_cn=https://ispip.clang.cn/all_cn.txt" >> $GITHUB_ENV
-		  echo "Clang_cn6=https://ispip.clang.cn/all_cn_ipv6.txt" >> $GITHUB_ENV
-		  echo "gaoyifan_cn=https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt" >> $GITHUB_ENV
-		  echo "gaoyifan_cn6=https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt" >> $GITHUB_ENV
+          echo "Clang_cn=https://ispip.clang.cn/all_cn.txt" >> $GITHUB_ENV
+          echo "Clang_cn6=https://ispip.clang.cn/all_cn_ipv6.txt" >> $GITHUB_ENV
+          echo "gaoyifan_cn=https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt" >> $GITHUB_ENV
+          echo "gaoyifan_cn6=https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt" >> $GITHUB_ENV
           echo "blackmatrix7_chinamax_domain=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMax/ChinaMax_Domain.txt" >> $GITHUB_ENV
         shell: bash
 
@@ -58,8 +58,8 @@ jobs:
           mkdir -p Loyalsoldier/ruleset
           mkdir -p Loyalsoldier/ipset
           mkdir -p Loyalsoldier/ipcidr
-		  mkdir -p Clang
-		  mkdir -p gaoyifan
+          mkdir -p Clang
+          mkdir -p gaoyifan
           mkdir -p blackmatrix7
           
       - name: Generate icloud.txt file
@@ -237,14 +237,13 @@ jobs:
       - name: Move files to publish directory
         run: |
           mkdir -p publish/Loyalsoldier
-		  mkdir -p publish/Clang
-		  mkdir -p publish/gaoyifan
+          mkdir -p publish/Clang
+          mkdir -p publish/gaoyifan
           mkdir -p publish/blackmatrix7
-		  mv Loyalsoldier/* ./publish/Loyalsoldier/
+          mv Loyalsoldier/* ./publish/Loyalsoldier/
           mv Clang/* ./publish/Clang/
-		  mv gaoyifan/* ./publish/gaoyifan/
-		  mv blackmatrix7/* ./publish/blackmatrix7/
-          
+          mv gaoyifan/* ./publish/gaoyifan/
+          mv blackmatrix7/* ./publish/blackmatrix7/
 
       - name: Git push assets to "release" branch
         run: |
