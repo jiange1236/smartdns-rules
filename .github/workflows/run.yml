@@ -50,6 +50,9 @@ jobs:
           echo "blackmatrix7_chinamax_domain=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMax/ChinaMax_Domain.txt" >> $GITHUB_ENV
           echo "blackmatrix7_global_domain=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Global/Global_Domain.txt" >> $GITHUB_ENV
           echo "stream_utils_domain=https://raw.githubusercontent.com/1-stream/1stream-public-utils/main/stream.smartdns.list" >> $GITHUB_ENV
+          echo "felixonmars_china=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf" >> $GITHUB_ENV
+          echo "felixonmars_apple=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" >> $GITHUB_ENV
+          echo "felixonmars_google=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" >> $GITHUB_ENV
         shell: bash
 
       - name: Checkout the default branch
@@ -64,6 +67,7 @@ jobs:
           mkdir -p gaoyifan
           mkdir -p blackmatrix7
           mkdir -p 1stream
+          mkdir -p felixonmars
           
       - name: Generate icloud.txt file
         run: |
@@ -139,16 +143,6 @@ jobs:
           curl -sSL ${private_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/cn+private.txt
           curl -sSL ${cn_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/cn+private.txt
 
-      - name: Generate Clang-cn.txt file
-        run: |
-          curl -sSL ${Clang_cn} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Clang/Clang-cn.txt
-          curl -sSL ${Clang_cn6} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Clang/Clang-cn.txt
-
-      - name: Generate gaoyifan-cn.txt file
-        run: |
-          curl -sSL ${gaoyifan_cn} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > gaoyifan/gaoyifan-cn.txt
-          curl -sSL ${gaoyifan_cn6} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> gaoyifan/gaoyifan-cn.txt
-
       - name: Generate cn.txt file
         run: |
           curl -sSL ${cn_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Loyalsoldier/ipset/cn.txt
@@ -219,6 +213,16 @@ jobs:
           curl -sSL ${twitter_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Loyalsoldier/ipset/twitter.txt
           curl -sSL ${twitter_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> Loyalsoldier/ipcidr/twitter-cidr.txt
 
+      - name: Generate Clang-cn.txt file
+        run: |
+          curl -sSL ${Clang_cn} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > Clang/Clang-cn.txt
+          curl -sSL ${Clang_cn6} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> Clang/Clang-cn.txt
+
+      - name: Generate gaoyifan-cn.txt file
+        run: |
+          curl -sSL ${gaoyifan_cn} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "$1\n"' > gaoyifan/gaoyifan-cn.txt
+          curl -sSL ${gaoyifan_cn6} | grep ":" | perl -ne '/(.+\/\d+)/ && print "$1\n"' >> gaoyifan/gaoyifan-cn.txt
+
       - name: Generate ChinaMax_Domain.txt file
         run: |
           curl -sSL ${blackmatrix7_chinamax_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed 's/^\.//;s/^\s*//' > blackmatrix7/ChinaMax_Domain.txt
@@ -227,34 +231,51 @@ jobs:
         run: |
           curl -sSL ${blackmatrix7_global_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed 's/^\.//;s/^\s*//' > blackmatrix7/Global_Domain.txt
 
-      - name: Generate stream-smartdns.txt file
+      - name: Generate stream.smartdns.txt file
         run: |
-          curl -sSL ${stream_utils_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/nameserver \/\(.*\)\/<replace with groupname>/\1/g' > 1stream/stream-smartdns.txt
+          curl -sSL ${stream_utils_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/nameserver \/\(.*\)\/<replace with groupname>/\1/g' > 1stream/stream.smartdns.txt
 
-      - name: Zip Files Action
+      - name: Generate accelerated-domains.china.txt file
+        run: |
+          curl -sSL ${felixonmars_china} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/server=\/\([^\/]*\)\/114.114.114.114/\1/g' > felixonmars/accelerated-domains.china.txt
+
+      - name: Generate apple.china.txt file
+        run: |
+          curl -sSL ${felixonmars_apple} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/server=\/\([^\/]*\)\/114.114.114.114/\1/g' > felixonmars/apple.china.txt
+
+      - name: Generate google.china.txt file
+        run: |
+          curl -sSL ${felixonmars_google} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/server=\/\([^\/]*\)\/114.114.114.114/\1/g' > felixonmars/google.china.txt
+
+      - name: Zip Loyalsoldier
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r Loyalsoldier.zip Loyalsoldier
 
-      - name: Zip Files Action
+      - name: Zip Clang
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r Clang.zip Clang
 
-      - name: Zip Files Action
+      - name: Zip gaoyifan
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r gaoyifan.zip gaoyifan
 
-      - name: Zip Files Action
+      - name: Zip blackmatrix7
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r blackmatrix7.zip blackmatrix7
 
-      - name: Zip Files Action
+      - name: Zip 1stream
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r 1stream.zip 1stream
+
+      - name: Zip felixonmars
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r felixonmars.zip felixonmars
 
       - name: Upload files to GitHub release
         uses: softprops/action-gh-release@v2.0.5
@@ -272,11 +293,13 @@ jobs:
           mkdir -p publish/gaoyifan
           mkdir -p publish/blackmatrix7
           mkdir -p publish/1stream
+          mkdir -p publish/felixonmars
           mv Loyalsoldier/* ./publish/Loyalsoldier/
           mv Clang/* ./publish/Clang/
           mv gaoyifan/* ./publish/gaoyifan/
           mv blackmatrix7/* ./publish/blackmatrix7/
           mv 1stream/* ./publish/1stream/
+          mv felixonmars/* ./publish/felixonmars/
 
       - name: Git push assets to "release" branch
         run: |
