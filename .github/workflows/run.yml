@@ -205,7 +205,7 @@ jobs:
       - name: Zip Files Action
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r ./publish/Loyalsoldier.zip Loyalsoldier
+          args: zip -qq -r Loyalsoldier.zip Loyalsoldier
 
       - name: Move files to publish directory
         run: |
