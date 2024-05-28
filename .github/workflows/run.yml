@@ -69,7 +69,7 @@ jobs:
           mkdir -p Clang
           mkdir -p gaoyifan
           mkdir -p blackmatrix7
-          mkdir -p 1stream
+          mkdir -p 1-stream
           mkdir -p felixonmars
 
       - name: Generate geosite file
@@ -251,7 +251,7 @@ jobs:
 
       - name: Generate stream.smartdns.txt file
         run: |
-          curl -sSL ${stream_utils_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/nameserver \/\(.*\)\/<replace with groupname>/\1/g' > 1stream/stream.smartdns.txt
+          curl -sSL ${stream_utils_domain} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/nameserver \/\(.*\)\/<replace with groupname>/\1/g' > 1-stream/stream.smartdns.txt
 
       - name: Generate accelerated-domains.china.txt file
         run: |
@@ -285,10 +285,10 @@ jobs:
         with:
           args: zip -qq -r blackmatrix7.zip blackmatrix7
 
-      - name: Zip 1stream
+      - name: Zip 1-stream
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r 1stream.zip 1stream
+          args: zip -qq -r 1-stream.zip 1-stream
 
       - name: Zip felixonmars
         uses: montudor/action-zip@v1
@@ -310,13 +310,13 @@ jobs:
           mkdir -p publish/Clang
           mkdir -p publish/gaoyifan
           mkdir -p publish/blackmatrix7
-          mkdir -p publish/1stream
+          mkdir -p publish/1-stream
           mkdir -p publish/felixonmars
           mv Loyalsoldier/* ./publish/Loyalsoldier/
           mv Clang/* ./publish/Clang/
           mv gaoyifan/* ./publish/gaoyifan/
           mv blackmatrix7/* ./publish/blackmatrix7/
-          mv 1stream/* ./publish/1stream/
+          mv 1-stream/* ./publish/1-stream/
           mv felixonmars/* ./publish/felixonmars/
 
       - name: Git push assets to "release" branch
@@ -348,4 +348,19 @@ jobs:
           done
           for file in $(ls Loyalsoldier/geosite); do
             curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/geosite/${file}"
+          done
+          for file in $(ls Clang); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Clang/${file}"
+          done
+          for file in $(ls gaoyifan); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/gaoyifan/${file}"
+          done
+          for file in $(ls blackmatrix7); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/blackmatrix7/${file}"
+          done
+          for file in $(ls 1-stream); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/1-stream/${file}"
+          done
+          for file in $(ls felixonmars); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/felixonmars/${file}"
           done
