@@ -4,7 +4,7 @@
 
 ## 说明
 
-本项目规则集（DOMAIN-SET 和 RULE-SET）的数据主要来源于项目 [@Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 和 [@v2fly/domain-list-community](https://github.com/v2fly/domain-list-community)；[`Apple`](https://github.com/jiange1236/smartdns-rules/blob/release/Loyalsoldier/apple-cn.txt) 和 [`Google`](https://github.com/jiange1236/smartdns-rules/blob/release/Loyalsoldier/google-cn.txt) 列表里的部分域名来源于项目 [@felixonmars/dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list)；中国大陆 IPv4 地址数据使用 [@17mon/china_ip_list](https://github.com/17mon/china_ip_list)。
+本项目规则集（DOMAIN-SET、IP-SET、RULE-SET 和 IP-CIDR）的数据主要来源于项目 [@Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 和 [@v2fly/domain-list-community](https://github.com/v2fly/domain-list-community)；[`Apple`](https://github.com/jiange1236/smartdns-rules/blob/release/Loyalsoldier/apple-cn.txt) 和 [`Google`](https://github.com/jiange1236/smartdns-rules/blob/release/Loyalsoldier/google-cn.txt) 列表里的部分域名来源于项目 [@felixonmars/dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list)；中国大陆 IPv4 地址数据使用 [@17mon/china_ip_list](https://github.com/17mon/china_ip_list)。
 
 ## 规则文件地址及使用方式
 
@@ -44,6 +44,35 @@
 - **非中国大陆使用的顶级域名列表 tld-not-cn.txt**：
   - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Loyalsoldier/tld-not-cn.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Loyalsoldier/tld-not-cn.txt)
   - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/tld-not-cn.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/tld-not-cn.txt)
+###### 1-stream
+- **非中国大陆域名列表 stream.smartdns.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/1stream/stream.smartdns.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/1stream/stream.smartdns.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/1stream/stream.smartdns.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/1stream/stream.smartdns.txt)
+###### Clang
+- **中国大陆域名列表 Clang-cn.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Clang/Clang-cn.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Clang/Clang-cn.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Clang/Clang-cn.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Clang/Clang-cn.txt)
+###### blackmatrix7
+- **中国大陆域名列表 ChinaMax_Domain.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/blackmatrix7/ChinaMax_Domain.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/blackmatrix7/ChinaMax_Domain.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/blackmatrix7/ChinaMax_Domain.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/blackmatrix7/ChinaMax_Domain.txt)
+- **非中国大陆域名列表 Global_Domain.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/blackmatrix7/Global_Domain.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/blackmatrix7/Global_Domain.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/blackmatrix7/Global_Domain.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/blackmatrix7/Global_Domain.txt)
+###### felixonmars
+- **中国大陆域名列表 accelerated-domains.china.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/felixonmars/accelerated-domains.china.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/felixonmars/accelerated-domains.china.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/felixonmars/accelerated-domains.china.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/felixonmars/accelerated-domains.china.txt)
+- **Apple 在中国大陆可直连的域名列表 apple.china.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/felixonmars/apple.china.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/felixonmars/apple.china.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/felixonmars/apple.china.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/felixonmars/apple.china.txt)
+- **Google 在中国大陆可直连的域名列表 google.china.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/felixonmars/google.china.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/felixonmars/google.china.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/felixonmars/google.china.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/felixonmars/google.china.txt)
+###### gaoyifan
+- **中国大陆域名列表 gaoyifan-cn.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/gaoyifan/gaoyifan-cn.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/gaoyifan/gaoyifan-cn.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/gaoyifan/gaoyifan-cn.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/gaoyifan/gaoyifan-cn.txt)
 
 #### IP-SET:
 
@@ -77,6 +106,10 @@
 - **Twitter 使用的 IP 地址列表 twitter.txt**：
   - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Loyalsoldier/ipset/twitter.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Loyalsoldier/ipset/twitter.txt)
   - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/ipset/twitter.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/ipset/twitter.txt)
+###### IP-SET(special):
+- **中国大陆 IP + 私有网络专用 IP 地址列表 cn+private.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Loyalsoldier/ipset/cn+private.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Loyalsoldier/ipset/cn+private.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/ipset/cn+private.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/ipset/cn+private.txt)
 
 #### RULE-SET:
 
@@ -146,7 +179,7 @@
 
 ### 使用方式
 
-关于 Smartdns 的详细使用方法，见[官方手册](https://pymumu.github.io/smartdns)。要想使用本项目的规则集，只需要在 Smartdns 配置文件中添加如下规则：
+关于 Smartdns 的详细使用方法，见[官方手册](https://pymumu.github.io/smartdns)。
 
 
 ## 致谢
