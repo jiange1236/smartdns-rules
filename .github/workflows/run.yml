@@ -78,13 +78,13 @@ jobs:
           wget -O geosite.dat $Loyalsoldier_geositedat
           chmod +x geo
           ./geo unpack site geosite.dat -d output -c geolocation-cn
-          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' 'output/geolocation-cn' > Loyalsoldier/geosite/geosite-cn.txt
+          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/\./! s/^/./' 'output/geolocation-cn' > Loyalsoldier/geosite/geolocation-cn.txt
           ./geo unpack site geosite.dat -d output -c tld-cn
-          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' 'output/tld-cn' >> Loyalsoldier/geosite/geosite-cn.txt
+          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/\./! s/^/./' 'output/tld-cn' >> Loyalsoldier/geosite/geolocation-cn.txt
           ./geo unpack site geosite.dat -d output -c geolocation-!cn
-          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' 'output/geolocation-!cn' > Loyalsoldier/geosite/geolocation-!cn.txt
+          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' -e '/\./! s/^/./' 'output/geolocation-!cn' > Loyalsoldier/geosite/geolocation-!cn.txt
           ./geo unpack site geosite.dat -d output -c tld-!cn
-          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' 'output/tld-!cn' >> Loyalsoldier/geosite/geolocation-!cn.txt
+          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' -e '/\./! s/^/./' 'output/tld-!cn' >> Loyalsoldier/geosite/geolocation-!cn.txt
           rm -rf output && rm -f geo && rm -f geosite.dat
           
       - name: Generate icloud.txt file
