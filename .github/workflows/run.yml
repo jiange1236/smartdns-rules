@@ -22,9 +22,11 @@ jobs:
         run: |
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "METAGEO_URL=https://github.com/MetaCubeX/geo/releases/download/v1.0/geo-linux-amd64" >> $GITHUB_ENV
           echo "custom_icloud=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/icloud.txt" >> $GITHUB_ENV
           echo "custom_tld_not_cn=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/tld-!cn.txt" >> $GITHUB_ENV
           echo "custom_private=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/private.txt" >> $GITHUB_ENV
+          echo "Loyalsoldier_geositedat=https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" >> $GITHUB_ENV
           echo "Loyalsoldier_direct=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt" >> $GITHUB_ENV
           echo "Loyalsoldier_proxy=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt" >> $GITHUB_ENV
           echo "Loyalsoldier_reject=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/reject-list.txt" >> $GITHUB_ENV
@@ -63,11 +65,27 @@ jobs:
           mkdir -p Loyalsoldier/ruleset
           mkdir -p Loyalsoldier/ipset
           mkdir -p Loyalsoldier/ipcidr
+          mkdir -p Loyalsoldier/geosite
           mkdir -p Clang
           mkdir -p gaoyifan
           mkdir -p blackmatrix7
           mkdir -p 1stream
           mkdir -p felixonmars
+
+      - name: Generate geosite file
+        run: |
+          wget -O geo $METAGEO_URL
+          wget -O geosite.dat $Loyalsoldier_geositedat
+          chmod +x geo
+          ./geo unpack site geosite.dat -d output -c geolocation-cn
+          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' 'output/geolocation-cn' > Loyalsoldier/geosite/geosite-cn.txt
+          ./geo unpack site geosite.dat -d output -c tld-cn
+          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' 'output/tld-cn' >> Loyalsoldier/geosite/geosite-cn.txt
+          ./geo unpack site geosite.dat -d output -c geolocation-!cn
+          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' 'output/geolocation-!cn' > Loyalsoldier/geosite/geolocation-!cn.txt
+          ./geo unpack site geosite.dat -d output -c tld-!cn
+          sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' 'output/tld-!cn' >> Loyalsoldier/geosite/geolocation-!cn.txt
+          rm -rf output && rm -f geo && rm -f geosite.dat
           
       - name: Generate icloud.txt file
         run: |
@@ -327,4 +345,7 @@ jobs:
           done
           for file in $(ls Loyalsoldier/ipcidr); do
             curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/ipcidr/${file}"
+          done
+          for file in $(ls Loyalsoldier/geosite); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/geosite/${file}"
           done
