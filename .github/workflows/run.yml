@@ -62,15 +62,7 @@ jobs:
 
       - name: Make directory
         run: |
-          mkdir -p Loyalsoldier/ruleset
-          mkdir -p Loyalsoldier/ipset
-          mkdir -p Loyalsoldier/ipcidr
-          mkdir -p Loyalsoldier/geosite
-          mkdir -p Clang
-          mkdir -p gaoyifan
-          mkdir -p blackmatrix7
-          mkdir -p 1-stream
-          mkdir -p felixonmars
+          mkdir -p "Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars"
 
       - name: Generate geosite file
         run: |
@@ -306,18 +298,11 @@ jobs:
 
       - name: Move files to publish directory
         run: |
-          mkdir -p publish/Loyalsoldier
-          mkdir -p publish/Clang
-          mkdir -p publish/gaoyifan
-          mkdir -p publish/blackmatrix7
-          mkdir -p publish/1-stream
-          mkdir -p publish/felixonmars
-          mv Loyalsoldier/* ./publish/Loyalsoldier/
-          mv Clang/* ./publish/Clang/
-          mv gaoyifan/* ./publish/gaoyifan/
-          mv blackmatrix7/* ./publish/blackmatrix7/
-          mv 1-stream/* ./publish/1-stream/
-          mv felixonmars/* ./publish/felixonmars/
+          DIRS=("Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang") 
+          for DIR in "${DIRS[@]}"; do     
+              mkdir -p "publish/$DIR"
+              mv "$DIR"/* "./publish/$DIR/"
+          done
 
       - name: Git push assets to "release" branch
         run: |
@@ -331,36 +316,16 @@ jobs:
           git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
           git push -f -u origin release
 
-      - name: Purge jsdelivr CDN
+      - name: Purge jsdelivr CDN  
         run: |
           cd publish || exit 1
-          for file in $(ls Loyalsoldier); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/${file}"
-          done
-          for file in $(ls Loyalsoldier/ruleset); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/ruleset/${file}"
-          done
-          for file in $(ls Loyalsoldier/ipset); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/ipset/${file}"
-          done
-          for file in $(ls Loyalsoldier/ipcidr); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/ipcidr/${file}"
-          done
-          for file in $(ls Loyalsoldier/geosite); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Loyalsoldier/geosite/${file}"
-          done
-          for file in $(ls Clang); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/Clang/${file}"
-          done
-          for file in $(ls gaoyifan); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/gaoyifan/${file}"
-          done
-          for file in $(ls blackmatrix7); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/blackmatrix7/${file}"
-          done
-          for file in $(ls 1-stream); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/1-stream/${file}"
-          done
-          for file in $(ls felixonmars); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/felixonmars/${file}"
+          for DIR in "${DIRS[@]}"; do  
+            if [ -d "$DIR" ]; then  
+              for file in "$DIR"/*; do  
+                if [ -f "$file" ]; then  
+                  RELATIVE_PATH="${file#$PWD/publish/}"  
+                  curl -si "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/${RELATIVE_PATH}"  
+                fi  
+              done  
+            fi
           done
