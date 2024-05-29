@@ -46,8 +46,8 @@
   - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/tld-not-cn.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/tld-not-cn.txt)
 ###### 1-stream
 - **非中国大陆域名列表 stream.smartdns.txt**：
-  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/1stream/stream.smartdns.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/1stream/stream.smartdns.txt)
-  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/1stream/stream.smartdns.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/1stream/stream.smartdns.txt)
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/1-stream/stream.smartdns.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/1-stream/stream.smartdns.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/1-stream/stream.smartdns.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/1-stream/stream.smartdns.txt)
 ###### Clang
 - **中国大陆域名列表 Clang-cn.txt**：
   - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Clang/Clang-cn.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Clang/Clang-cn.txt)
