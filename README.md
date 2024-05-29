@@ -69,10 +69,6 @@
 - **Google 在中国大陆可直连的域名列表 google.china.txt**：
   - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/felixonmars/google.china.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/felixonmars/google.china.txt)
   - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/felixonmars/google.china.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/felixonmars/google.china.txt)
-###### gaoyifan
-- **中国大陆域名列表 gaoyifan-cn.txt**：
-  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/gaoyifan/gaoyifan-cn.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/gaoyifan/gaoyifan-cn.txt)
-  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/gaoyifan/gaoyifan-cn.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/gaoyifan/gaoyifan-cn.txt)
 
 #### IP-SET:
 
@@ -110,6 +106,10 @@
 - **中国大陆 IP + 私有网络专用 IP 地址列表 cn+private.txt**：
   - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Loyalsoldier/ipset/cn+private.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Loyalsoldier/ipset/cn+private.txt)
   - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/ipset/cn+private.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Loyalsoldier/ipset/cn+private.txt)
+###### gaoyifan
+- **中国大陆 IP 列表 gaoyifan-cn.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/gaoyifan/gaoyifan-cn.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/gaoyifan/gaoyifan-cn.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/gaoyifan/gaoyifan-cn.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/gaoyifan/gaoyifan-cn.txt)
 
 #### RULE-SET:
 
