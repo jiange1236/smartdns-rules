@@ -319,6 +319,7 @@ jobs:
       - name: Purge jsdelivr CDN  
         run: |
           cd publish || exit 1
+          DIRS=("Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars") 
           for DIR in "${DIRS[@]}"; do  
             if [ -d "$DIR" ]; then  
               for file in "$DIR"/*; do  
