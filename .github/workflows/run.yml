@@ -298,10 +298,10 @@ jobs:
 
       - name: Move files to publish directory
         run: |
-          DIRS=("Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang") 
+          DIRS=("Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars") 
           for DIR in "${DIRS[@]}"; do     
               mkdir -p "publish/$DIR"
-              mv "$DIR"/* "./publish/$DIR/"
+              find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
           done
 
       - name: Git push assets to "release" branch
