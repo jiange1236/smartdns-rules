@@ -64,9 +64,9 @@ jobs:
               mkdir -p "publish/$DIR"
               find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
           done
-          find "publish/Loyalsoldier/geosite" -type f -printf '%f\n' >> publish/Loyalsoldier_geositelist.txt  
-          find "publish/Loyalsoldier/geoip" -type f -printf '%f\n' >> publish/Loyalsoldier_geoiplist.txt  
-          find "publish/v2fly/geosite" -type f -printf '%f\n' >> publish/v2fly_geositelist.txt
+          find "publish/Loyalsoldier/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geositelist.txt  
+          find "publish/Loyalsoldier/geoip" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geoiplist.txt  
+          find "publish/v2fly/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/v2fly_geositelist.txt
 
       - name: Git push assets to "data" branch
         run: |
