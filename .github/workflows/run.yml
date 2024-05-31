@@ -58,6 +58,7 @@ jobs:
           echo "felixonmars_china=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf" >> $GITHUB_ENV
           echo "felixonmars_apple=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" >> $GITHUB_ENV
           echo "felixonmars_google=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" >> $GITHUB_ENV
+          echo "GeoIP2_CN=https://raw.githubusercontent.com/Hackl0us/GeoIP2-CN/release/CN-ip-cidr.txt" >> $GITHUB_ENV
         shell: bash
 
       - name: Checkout the default branch
@@ -65,7 +66,7 @@ jobs:
 
       - name: Make directory
         run: |
-          mkdir -p "Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars"
+          mkdir -p "Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars" "Hackl0us"
 
       - name: Generate geosite file
         run: |
@@ -260,6 +261,10 @@ jobs:
         run: |
           curl -sSL ${felixonmars_google} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/server=\/\([^\/]*\)\/114.114.114.114/\1/g' > felixonmars/google.china.txt
 
+      - name: Generate CN-ip-cidr.txt file
+        run: |
+          curl -sSL ${GeoIP2_CN} | grep -Ev "^#" | grep -v "^[[:space:]]*$" | sed -e 's/server=\/\([^\/]*\)\/114.114.114.114/\1/g' > Hackl0us/CN-ip-cidr.txt
+
       - name: Zip Loyalsoldier
         uses: montudor/action-zip@v1
         with:
@@ -290,6 +295,11 @@ jobs:
         with:
           args: zip -qq -r felixonmars.zip felixonmars
 
+      - name: Zip Hackl0us
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r Hackl0us.zip Hackl0us
+
       - name: Upload files to GitHub release
         uses: softprops/action-gh-release@v2.0.5
         with:
@@ -301,7 +311,7 @@ jobs:
 
       - name: Move files to publish directory
         run: |
-          DIRS=("Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars") 
+          DIRS=("Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars" "Hackl0us") 
           for DIR in "${DIRS[@]}"; do     
               mkdir -p "publish/$DIR"
               find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
@@ -322,7 +332,7 @@ jobs:
       - name: Purge jsdelivr CDN  
         run: |
           cd publish || exit 1
-          DIRS=("Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars") 
+          DIRS=("Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars" "Hackl0us") 
           for DIR in "${DIRS[@]}"; do  
             if [ -d "$DIR" ]; then  
               for file in "$DIR"/*; do  
