@@ -49,12 +49,6 @@ jobs:
           v2dat unpack geoip -o "Loyalsoldier/geoip" geoip.dat
           v2dat unpack geosite -o "Loyalsoldier/geosite" geosite.dat
           v2dat unpack geosite -o "v2fly/geosite" dlc.dat
-  
-      - name: Upload renamed files list as artifact  
-        uses: actions/upload-artifact@v3
-        with:  
-          name: renamed-files-list  
-          path: publish/renamed-files.txt
 
 #    - name: Genrate yaml files
 #      run: |
@@ -62,19 +56,16 @@ jobs:
 
       - name: Move files to publish directory
         run: |
-          DIRS=("Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite")
-          find "Loyalsoldier/geosite" -type f -printf '%f\n' | while read -r file; do
-            echo "${file#geosite_}" >> publish/Loyalsoldier_geositelist.txt
-          done
-          find "Loyalsoldier/geoip" -type f -printf '%f\n' | while read -r file; do
-            echo "${file#geoip_}" >> publish/Loyalsoldier_geoiplist.txt
-          done
-          find "v2fly/geosite" -type f -printf '%f\n' | while read -r file; do
-            echo "${file#dlc_}" >> publish/v2fly_geositelist.txt
-          done
-          for DIR in "${DIRS[@]}"; do     
-              mkdir -p "publish/$DIR"
-              find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
+          DIRS=(["Loyalsoldier/geosite"]="geosite_" ["Loyalsoldier/geoip"]="geoip_" ["v2fly/geosite"]="dlc_")
+          mkdir -p publish
+          for DIR in "${!DIRS[@]}"; do     
+            PREFIX="${DIRS[$DIR]}"
+            OUTPUT_FILE="publish/${DIR#*/}_list.txt"
+            find "$DIR" -type f -printf '%f\n' | while read -r file; do
+              echo "${file#${PREFIX}}" >> "$OUTPUT_FILE"
+            done
+            mkdir -p "publish/$DIR"
+            find "$DIR" -maxdepth 1 -type f -exec mv {} "publish/$DIR/" \;  
           done
 
       - name: Git push assets to "data" branch
