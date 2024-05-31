@@ -56,10 +56,11 @@ jobs:
 
       - name: Move files to publish directory
         run: |
-          DIRS=("Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite") 
+          DIRS=("Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite")
           for DIR in "${DIRS[@]}"; do     
               mkdir -p "publish/$DIR"
               find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
+          done
 
       - name: Git push assets to "data" branch
         run: |
