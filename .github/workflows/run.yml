@@ -7,7 +7,10 @@ on:
     branches:
       - master
     paths-ignore:
-      - "**/README.md"
+      - "README.md"
+      - "LICENSE"
+      - ".github/workflows/geodata.yml"
+      
 permissions:
   contents: write
   packages: write
