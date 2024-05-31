@@ -58,7 +58,7 @@ jobs:
         run: |
           DIRS=(["Loyalsoldier/geosite"]="geosite_" ["Loyalsoldier/geoip"]="geoip_" ["v2fly/geosite"]="dlc_")
           mkdir -p publish
-          for DIR in "${!DIRS[@]}"; do     
+          for DIR in "${DIRS[@]}"; do     
             PREFIX="${DIRS[$DIR]}"
             OUTPUT_FILE="publish/${DIR#*/}_list.txt"
             find "$DIR" -type f -printf '%f\n' | while read -r file; do
