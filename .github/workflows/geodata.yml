@@ -56,24 +56,17 @@ jobs:
 
       - name: Move files to publish directory
         run: |
-          mkdir -p publish
-          find "Loyalsoldier/geosite" -type f -printf '%P\n' | while read -r file; do
-            base_name=$(echo "$file" | sed -E 's/^geosite_|(\.[^.]+)$//g')
-            echo "$base_name" >> publish/Loyalsoldier_geositelist.txt
-          done
-          find "Loyalsoldier/geoip" -type f -printf '%P\n' | while read -r file; do
-            base_name=$(echo "$file" | sed -E 's/^geoip_|(\.[^.]+)$//g')  
-            echo "$base_name" >> publish/Loyalsoldier_geoiplist.txt  
-          done
-          find "v2fly/geosite" -type f -printf '%P\n' | while read -r file; do  
-            base_name=$(echo "$file" | sed -E 's/^dlc_|(\.[^.]+)$//g')  
-            echo "$base_name" >> publish/v2fly_geositelist.txt  
-          done
           DIRS=("Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite")
+          find "Loyalsoldier/geosite" -type f -name "geosite_*" -exec bash -c 'mv "$1" "${1/geosite_/}"' -- {} \;
+          find "Loyalsoldier/geoip" -type f -name "geoip_*" -exec bash -c 'mv "$1" "${1/geoip_/}"' -- {} \;
+          find "v2fly/geosite" -type f -name "dlc_*" -exec bash -c 'mv "$1" "${1/dlc_/}"' -- {} \; 
           for DIR in "${DIRS[@]}"; do     
               mkdir -p "publish/$DIR"
               find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
           done
+          find "publish/Loyalsoldier/geosite" -type f -printf '%f\n' >> publish/Loyalsoldier_geositelist.txt  
+          find "publish/Loyalsoldier/geoip" -type f -printf '%f\n' >> publish/Loyalsoldier_geoiplist.txt  
+          find "publish/v2fly/geosite" -type f -printf '%f\n' >> publish/v2fly_geositelist.txt
 
       - name: Git push assets to "data" branch
         run: |
