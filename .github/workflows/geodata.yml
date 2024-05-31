@@ -3,6 +3,11 @@ name: Python Package using Conda
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+  actions: write
+
 jobs:
   build-linux:
     runs-on: ubuntu-latest
