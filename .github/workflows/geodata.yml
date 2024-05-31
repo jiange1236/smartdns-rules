@@ -69,15 +69,15 @@ jobs:
           for DIR in "${DIRS[@]}"; do     
               mkdir -p "publish/original/$DIR"
               mkdir -p "publish/rules/$DIR"
+              cp -r "$DIR"/* "publish/original/$DIR"
               for file in "$DIR"/*; do
                 if [ -f "$file" ]; then
                   filename=$(basename "$file")
                   target_dir="./publish/rules/$DIR"
                   target_file="$target_dir/$filename"
-                  sed -e 's/^Domain://g' -e 's/^Full://g' -e '/^Regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' -e '/\./! s/^/./' "$file" > "$target_file"
+                  sed -e 's/^Domain://g' -e 's/^full://g' -e '/^regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' -e '/\./! s/^/./' "$file" > "$target_file"
                 fi
               done
-              find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
           done
           find "publish/Loyalsoldier/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geositelist.txt  
           find "publish/Loyalsoldier/geoip" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geoiplist.txt  
