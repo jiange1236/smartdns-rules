@@ -110,6 +110,10 @@
 - **中国大陆 IP 列表 gaoyifan-cn.txt**：
   - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/gaoyifan/gaoyifan-cn.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/gaoyifan/gaoyifan-cn.txt)
   - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/gaoyifan/gaoyifan-cn.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/gaoyifan/gaoyifan-cn.txt)
+###### Hackl0us
+- **中国大陆 IP 列表 CN-ip-cidr.txt**：
+  - [https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Hackl0us/CN-ip-cidr.txt](https://raw.githubusercontent.com/jiange1236/smartdns-rules/release/Hackl0us/CN-ip-cidr.txt)
+  - [https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Hackl0us/CN-ip-cidr.txt](https://cdn.jsdelivr.net/gh/jiange1236/smartdns-rules@release/Hackl0us/CN-ip-cidr.txt)
 
 #### RULE-SET:
 
