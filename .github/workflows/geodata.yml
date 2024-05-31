@@ -56,16 +56,19 @@ jobs:
 
       - name: Move files to publish directory
         run: |
-          DIRS=(["Loyalsoldier/geosite"]="geosite_" ["Loyalsoldier/geoip"]="geoip_" ["v2fly/geosite"]="dlc_")
-          mkdir -p publish
-          for key in "${!DIRS[@]}"; do
-            PREFIX="${DIRS[$key]}"
-            OUTPUT_FILE="publish/$(echo "$key" | sed 's|/|_|g')_list.txt"
-            find "$key" -type f -printf '%f\n' | while read -r file; do
-              echo "${file#$PREFIX}" >> "$OUTPUT_FILE"
-            done
-            mkdir -p "publish/$key"
-            find "$key" -maxdepth 1 -type f -exec mv {} "publish/$key/" \;
+          find "Loyalsoldier/geosite" -type f -printf '%f\n' | while read -r file; do
+            echo "${file#geosite_}" >> publish/Loyalsoldier_geositelist.txt
+          done
+          find "Loyalsoldier/geoip" -type f -printf '%f\n' | while read -r file; do
+            echo "${file#geoip_}" >> publish/Loyalsoldier_geoiplist.txt
+          done
+          find "v2fly/geosite" -type f -printf '%f\n' | while read -r file; do
+            echo "${file#dlc_}" >> publish/v2fly_geositelist.txt
+          done
+          DIRS=("Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite")
+          for DIR in "${DIRS[@]}"; do     
+              mkdir -p "publish/$DIR"
+              find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
           done
 
       - name: Git push assets to "data" branch
