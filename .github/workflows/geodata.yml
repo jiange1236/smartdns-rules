@@ -1,7 +1,10 @@
-name: Python Package using Conda
+name: Generate GeoData
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Generate routing rules for smartdns"]
+    types:
+      - completed
 
 permissions:
   contents: write
