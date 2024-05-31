@@ -74,7 +74,7 @@ jobs:
             find "$dir" -type f -name "${prefix}*" -exec bash -c '  
               filename=$(basename "{}")  
               new_filename="${filename#${prefix}}"  
-              new_path="${output_dir}/${new_filename}.txt"  
+              new_path="${output_dir}/${new_filename}"  
               sed -e "s/^Domain://g" \  
                   -e "s/^Full://g" \  
                   -e "/^Regex:/d" \  
