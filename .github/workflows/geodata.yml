@@ -5,6 +5,7 @@ on:
     workflows: ["Generate routing rules for smartdns"]
     types:
       - completed
+  workflow_dispatch:
 
 permissions:
   contents: write
