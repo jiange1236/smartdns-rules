@@ -60,43 +60,19 @@ jobs:
 #      run: |
 #        python main.py
 
-      - name: Process geosite files  
-        run: |  
-
-
-      - name: Move files to publish directory  
-        run: |  
-          DIRS=("Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite")  
-          PREFIXES=("geosite_" "geoip_" "dlc_")  
-          process_file() {    
-            local dir="$1"    
-            local prefix="$2"    
-            local output_dir="$3"    
-            find "$dir" -type f -name "${prefix}*" -exec bash -c '    
-              filename=$(basename "{}")    
-              new_filename="${filename#${prefix}}"    
-              new_path="${output_dir}/${new_filename}.txt"  # 注意这里添加了.txt扩展名  
-              sed -e "s/^Domain://g" \    
-                  -e "s/^Full://g" \    
-                  -e "/^Regex:/d" \    
-                  -e "/@ads$/d" \    
-                  -e "/^#/d" \    
-                  -e "/^\s*$/d" \    
-                  -e "/\\./! s/^/./" "{}" > "${new_path}"    
-            ' bash -- {} \;    
-          }      
-          for DIR in "${DIRS[@]}"; do       
-            mkdir -p "publish/original/$DIR"  
-            mkdir -p "publish/rules/$DIR"  
-            find "$DIR" -maxdepth 1 -type f -exec mv {} "publish/original/$DIR/" \;  
-          done    
-          for ((i=0; i<${#DIRS[@]}; i++)); do  
-            process_file "publish/original/${DIRS[i]}" "${PREFIXES[i]}" "publish/rules/${DIRS[i]}"  
-          done          
-          for DIR in "${DIRS[@]}"; do  
-            OUTPUT_LIST="publish/${DIR#*/}_${DIR##*/}list.txt"  # 动态生成列表文件名  
-            find "publish/original/$DIR" -type f -printf '%f\n' | awk -F. '{print $1}' >> "$OUTPUT_LIST"  
+      - name: Move files to publish directory
+        run: |
+          DIRS=("Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite")
+          find "Loyalsoldier/geosite" -type f -name "geosite_*" -exec bash -c 'mv "$1" "${1/geosite_/}"' -- {} \;
+          find "Loyalsoldier/geoip" -type f -name "geoip_*" -exec bash -c 'mv "$1" "${1/geoip_/}"' -- {} \;
+          find "v2fly/geosite" -type f -name "dlc_*" -exec bash -c 'mv "$1" "${1/dlc_/}"' -- {} \; 
+          for DIR in "${DIRS[@]}"; do     
+              mkdir -p "publish/$DIR"
+              find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
           done
+          find "publish/Loyalsoldier/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geositelist.txt  
+          find "publish/Loyalsoldier/geoip" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geoiplist.txt  
+          find "publish/v2fly/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/v2fly_geositelist.txt
 
       - name: Git push assets to "data" branch
         run: |
