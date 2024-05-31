@@ -41,9 +41,9 @@ jobs:
           curl -sSL ${Loyalsoldier_geositedat} > geosite.dat
           curl -sSL ${Loyalsoldier_geoipdat} > geoip.dat
           curl -sSL ${v2fly_geositedat} > dlc.dat
-          v2dat unpack geoip -d "Loyalsoldier/geoip" geoip.dat
-          v2dat unpack geosite -d "Loyalsoldier/geosite" geosite.dat
-          v2dat unpack geosite -d "v2fly/geosite" dlc.dat
+          v2dat unpack geoip -o "Loyalsoldier/geoip" geoip.dat
+          v2dat unpack geosite -o "Loyalsoldier/geosite" geosite.dat
+          v2dat unpack geosite -o "v2fly/geosite" dlc.dat
 
 #    - name: Genrate yaml files
 #      run: |
