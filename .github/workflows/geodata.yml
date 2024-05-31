@@ -79,9 +79,9 @@ jobs:
                 fi
               done
           done
-          find "publish/Loyalsoldier/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geositelist.txt  
-          find "publish/Loyalsoldier/geoip" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geoiplist.txt  
-          find "publish/v2fly/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/v2fly_geositelist.txt
+          find "publish/original/Loyalsoldier/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geositelist.txt  
+          find "publish/original/Loyalsoldier/geoip" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geoiplist.txt  
+          find "publish/original/v2fly/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/v2fly_geositelist.txt
 
       - name: Git push assets to "data" branch
         run: |
