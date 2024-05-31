@@ -56,6 +56,7 @@ jobs:
 
       - name: Move files to publish directory
         run: |
+          mkdir -p publish
           find "Loyalsoldier/geosite" -type f -printf '%f\n' | while read -r file; do
             echo "${file#geosite_}" >> publish/Loyalsoldier_geositelist.txt
           done
