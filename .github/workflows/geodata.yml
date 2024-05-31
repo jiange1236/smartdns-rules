@@ -75,7 +75,7 @@ jobs:
                   filename=$(basename "$file")
                   target_dir="./publish/rules/$DIR"
                   target_file="$target_dir/$filename"
-                  sed -e 's/^Domain://g' -e 's/^full://g' -e '/^regex:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' -e '/\./! s/^/./' "$file" > "$target_file"
+                  sed -e 's/^Domain://g' -e 's/^full://g' -e '/^regexp:/d' -e '/@ads$/d' -e '/^#/d' -e '/^\s*$/d' -e '/@cn$/d' -e '/\./! s/^/./' "$file" > "$target_file"
                 fi
               done
           done
