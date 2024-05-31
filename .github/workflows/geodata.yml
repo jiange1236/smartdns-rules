@@ -58,14 +58,14 @@ jobs:
         run: |
           DIRS=(["Loyalsoldier/geosite"]="geosite_" ["Loyalsoldier/geoip"]="geoip_" ["v2fly/geosite"]="dlc_")
           mkdir -p publish
-          for DIR in "${DIRS[@]}"; do     
-            PREFIX="${DIRS[$DIR]}"
-            OUTPUT_FILE="publish/${DIR#*/}_list.txt"
-            find "$DIR" -type f -printf '%f\n' | while read -r file; do
-              echo "${file#${PREFIX}}" >> "$OUTPUT_FILE"
+          for key in "${!DIRS[@]}"; do
+            PREFIX="${DIRS[$key]}"
+            OUTPUT_FILE="publish/$(echo "$key" | sed 's|/|_|g')_list.txt"
+            find "$key" -type f -printf '%f\n' | while read -r file; do
+              echo "${file#$PREFIX}" >> "$OUTPUT_FILE"
             done
-            mkdir -p "publish/$DIR"
-            find "$DIR" -maxdepth 1 -type f -exec mv {} "publish/$DIR/" \;  
+            mkdir -p "publish/$key"
+            find "$key" -maxdepth 1 -type f -exec mv {} "publish/$key/" \;
           done
 
       - name: Git push assets to "data" branch
