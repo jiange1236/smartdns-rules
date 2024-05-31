@@ -89,9 +89,9 @@ jobs:
               mkdir -p "publish/rules/$DIR"
               find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/original/$DIR/" \;
           done
-          process_file "publish/original/Loyalsoldier/geosite" "geosite_" "publish/rules/Loyalsoldier/geosite"  
-          process_file "publish/original/Loyalsoldier/geoip" "geoip_" "publish/rules/Loyalsoldier/geoip"  
-          process_file "publish/original/v2fly/geosite" "dlc_" "publish/rules/v2fly/geosite"
+          process_file "./publish/original/Loyalsoldier/geosite" "geosite_" "publish/rules/Loyalsoldier/geosite"  
+          process_file "./publish/original/Loyalsoldier/geoip" "geoip_" "publish/rules/Loyalsoldier/geoip"  
+          process_file "./publish/original/v2fly/geosite" "dlc_" "publish/rules/v2fly/geosite"
           find "publish/original/Loyalsoldier/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geositelist.txt  
           find "publish/original/Loyalsoldier/geoip" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/Loyalsoldier_geoiplist.txt  
           find "publish/original/v2fly/geosite" -type f -printf '%f\n' | awk -F. '{print $1}' >> publish/v2fly_geositelist.txt
