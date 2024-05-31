@@ -1,0 +1,73 @@
+name: Python Package using Conda
+
+on:
+  push:
+    branches:
+    - master
+  schedule:
+  - cron: "0 0 * * *"
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.17.0'
+
+      - name: Set variables
+        run: |
+          echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "METAGEO_URL=https://github.com/MetaCubeX/geo/releases/download/v1.0/geo-linux-amd64" >> $GITHUB_ENV
+          echo "Loyalsoldier_geositedat=https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat" >> $GITHUB_ENV
+          echo "Loyalsoldier_geoipdat=https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat" >> $GITHUB_ENV
+          echo "v2fly_geositedat=https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" >> $GITHUB_ENV
+          go install -v github.com/urlesistiana/v2dat@main
+        shell: bash
+
+      - name: Make directory
+        run: |
+          mkdir -p "Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite"
+
+      - name: Download files
+        run: |
+          curl -sSL ${Loyalsoldier_geositedat} > geosite.dat
+          curl -sSL ${Loyalsoldier_geoipdat} > geoip.dat
+          curl -sSL ${v2fly_geositedat} > dlc.dat
+          v2dat unpack geoip -d "Loyalsoldier/geoip" geoip.dat
+          v2dat unpack geosite -d "Loyalsoldier/geosite" geosite.dat
+          v2dat unpack geosite -d "v2fly/geosite" dlc.dat
+
+#    - name: Genrate yaml files
+#      run: |
+#        python main.py
+
+      - name: Move files to publish directory
+        run: |
+          DIRS=("Loyalsoldier/geosite" "Loyalsoldier/geoip" "v2fly/geosite") 
+          for DIR in "${DIRS[@]}"; do     
+              mkdir -p "publish/$DIR"
+              find "$DIR" -maxdepth 1 -type f -exec mv {} "./publish/$DIR/" \;
+
+      - name: Git push assets to "data" branch
+        run: |
+          cd publish || exit 1
+          git init
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b data
+          git add .
+          git commit -m "${{ env.RELEASE_NAME }}"
+          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git push -f -u origin data
