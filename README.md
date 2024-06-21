@@ -1,6 +1,6 @@
 # 简介
 
-本项目生成适用于 [**Smartdns**] 的规则集（DOMAIN-SET、IP-SET、RULE-SET 和 IP-CIDR）。使用 GitHub Actions 北京时间每天早上 6:30 自动构建，保证规则最新。
+本项目生成适用于 [**Smartdns**] 的规则集（DOMAIN-SET、IP-SET、RULE-SET 和 IP-CIDR）。使用 GitHub Actions 北京时间每天早上 6:40 自动构建，保证规则最新。
 
 ## 说明
 
