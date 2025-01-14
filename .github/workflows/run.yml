@@ -301,7 +301,7 @@ jobs:
           args: zip -qq -r Hackl0us.zip Hackl0us
 
       - name: Upload files to GitHub release
-        uses: softprops/action-gh-release@v2.0.8
+        uses: softprops/action-gh-release@v2.2.1
         with:
           tag_name: ${{ env.TAG_NAME }}
           files: |
