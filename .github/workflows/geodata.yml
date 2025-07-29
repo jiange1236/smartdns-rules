@@ -36,7 +36,7 @@ jobs:
         run: |
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-          echo "METAGEO_URL=https://github.com/MetaCubeX/geo/releases/download/v1.0/geo-linux-amd64" >> $GITHUB_ENV
+          echo "METAGEO_URL=https://github.com/MetaCubeX/geo/releases/download/v1.1/geo-linux-amd64" >> $GITHUB_ENV
           echo "Loyalsoldier_geositedat=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geosite.dat" >> $GITHUB_ENV
           echo "Loyalsoldier_geoipdat=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geoip.dat" >> $GITHUB_ENV
           echo "v2fly_geositedat=https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat" >> $GITHUB_ENV
