@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-          echo "METAGEO_URL=https://github.com/MetaCubeX/geo/releases/download/v1.1/geo-linux-amd64" >> $GITHUB_ENV
+          echo "METAGEO_URL=https://github.com/MetaCubeX/geo/releases/latest/download/geo-linux-amd64" >> $GITHUB_ENV
           echo "custom_icloud=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/icloud.txt" >> $GITHUB_ENV
           echo "custom_tld_not_cn=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/tld-!cn.txt" >> $GITHUB_ENV
           echo "custom_private=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/private.txt" >> $GITHUB_ENV
