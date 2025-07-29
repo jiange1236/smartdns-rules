@@ -66,7 +66,7 @@ jobs:
 
       - name: Make directory
         run: |
-          mkdir -p "Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars" "Hackl0us"
+          mkdir -p "output" "Loyalsoldier" "Loyalsoldier/ruleset" "Loyalsoldier/ipset" "Loyalsoldier/ipcidr" "Loyalsoldier/geosite" "Clang" "gaoyifan" "blackmatrix7" "1-stream" "felixonmars" "Hackl0us"
 
       - name: Generate geosite file
         run: |
