@@ -1,0 +1,3 @@
+perplexity.ai
+pplx.ai
+full:pplx-res.cloudinary.com

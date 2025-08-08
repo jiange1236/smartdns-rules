@@ -1,0 +1,5 @@
+gitlab.com
+gitlab.io
+gitlab.net
+gitlab-static.net
+gitlab-assets.oss-cn-hongkong.aliyuncs.com
