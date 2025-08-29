@@ -1,0 +1,4 @@
+perplexity.ai
+perplexity.com
+pplx.ai
+full:pplx-res.cloudinary.com
