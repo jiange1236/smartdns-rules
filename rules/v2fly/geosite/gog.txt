@@ -1,0 +1,8 @@
+gog-services.com
+gog-statics.com
+gog.com
+gogalaxy.com
+insights-collector.gog.com
+gog-cdn-lumen.secure2.footprint.net
+gog-cdn.akamaized.net
+gog.qtlglb.com

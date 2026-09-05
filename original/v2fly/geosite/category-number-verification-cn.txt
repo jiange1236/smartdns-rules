@@ -1,0 +1,7 @@
+cmpassport.com
+full:enrichgw.10010.com
+full:hap.10010.com
+full:hs.wosms.cn
+full:id6.me
+full:opencloud.wostore.cn
+regexp:^nis.+\.10010\.com$
