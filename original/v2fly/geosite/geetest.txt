@@ -1,0 +1,2 @@
+geetest.com
+full:geetest.datasink.sensorsdata.cn
