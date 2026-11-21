@@ -1,0 +1,2 @@
+ppy.sh
+sentry.ppy.sh
